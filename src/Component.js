@@ -1,0 +1,35 @@
+jQuery.sap.declare("sap.jaysdk.Component");
+
+sap.ui.core.UIComponent.extend("sap.jaysdk.Component", {
+
+	createContent: function() {
+
+		// create root view
+		var oView = sap.ui.view({
+			id: "app",
+			viewName: "sap.jaysdk.view.App",
+			type: "JS",
+			viewData: {
+				component: this
+			}
+		});
+
+		// set i18n model 
+		var i18nModel = new sap.ui.model.resource.ResourceModel({
+			bundleUrl: "i18n/messageBundle.properties"
+		});
+		oView.setModel(i18nModel, "i18n");
+
+		// set device model 
+		var deviceModel = new sap.ui.model.json.JSONModel({
+			isPhone: jQuery.device.is.phone,
+			isNoPhone: !jQuery.device.is.phone,
+			listMode: (jQuery.device.is.phone) ? "None" : "SingleSelectMaster",
+			listItemType: (jQuery.device.is.phone) ? "Active" : "Inactive"
+		});
+		deviceModel.setDefaultBindingMode("OneWay");
+
+		// done
+		return oView;
+	}
+});
